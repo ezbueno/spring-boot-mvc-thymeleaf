@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Table(name = "DEPARTAMENTOS")
 public class Departamento extends AbstractEntity<Long> {
 
-	@Column(name = "nome", nullable = false, unique = true, length = 60)
+	@Column(nullable = false, unique = true, length = 60)
 	private String nome;
 
 	@OneToMany(mappedBy = "departamento")

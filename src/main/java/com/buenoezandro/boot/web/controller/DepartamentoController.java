@@ -6,15 +6,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.buenoezandro.boot.domain.Departamento;
 import com.buenoezandro.boot.service.DepartamentoService;
+import com.buenoezandro.boot.utils.MensagemUtils;
 
 @Controller
 @RequestMapping(path = "/departamentos")
 public class DepartamentoController {
-	
+		
 	private final DepartamentoService departamentoService;
+	
+	private static final String SUCCESS = "success";
 	
 	public DepartamentoController(DepartamentoService departamentoService) {
 		this.departamentoService = departamentoService;
@@ -32,8 +36,9 @@ public class DepartamentoController {
 	}
 	
 	@PostMapping(path = "/salvar")
-	public String salvar(Departamento departamento) {
+	public String salvar(Departamento departamento, RedirectAttributes attributes) {
 		this.departamentoService.salvar(departamento);
+		attributes.addFlashAttribute(SUCCESS, MensagemUtils.INSERT);
 		return "redirect:/departamentos/cadastrar";
 	}
 	
@@ -44,15 +49,19 @@ public class DepartamentoController {
 	}
 	
 	@PostMapping(path = "/editar")
-	public String editar(Departamento departamento) {
+	public String editar(Departamento departamento, RedirectAttributes attributes) {
 		this.departamentoService.editar(departamento);
+		attributes.addFlashAttribute(SUCCESS, MensagemUtils.EDIT);
 		return "redirect:/departamentos/cadastrar";
 	}
 	
 	@GetMapping(path = "/excluir/{id}")
 	public String excluir(@PathVariable(value = "id") Long id, ModelMap model) {
-		if (!this.departamentoService.departamentoContemCargos(id)) {
+		if (this.departamentoService.departamentoContemCargos(id)) {
+			model.addAttribute("fail", MensagemUtils.FAIL);
+		} else {
 			this.departamentoService.excluir(id);
+			model.addAttribute(SUCCESS, MensagemUtils.DELETE);
 		}
 		return this.listar(model);
 	}

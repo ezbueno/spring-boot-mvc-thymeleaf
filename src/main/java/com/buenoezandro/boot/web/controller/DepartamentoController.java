@@ -3,6 +3,7 @@ package com.buenoezandro.boot.web.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -33,6 +34,18 @@ public class DepartamentoController {
 	@PostMapping(path = "/salvar")
 	public String salvar(Departamento departamento) {
 		this.departamentoService.salvar(departamento);
+		return "redirect:/departamentos/cadastrar";
+	}
+	
+	@GetMapping(path = "/editar/{id}")
+	public String preEditar(@PathVariable(value = "id") Long id, ModelMap model) {
+		model.addAttribute("departamento", this.departamentoService.buscarPorId(id));
+		return "/departamento/cadastro";
+	}
+	
+	@PostMapping(path = "/editar")
+	public String editar(Departamento departamento) {
+		this.departamentoService.editar(departamento);
 		return "redirect:/departamentos/cadastrar";
 	}
 }

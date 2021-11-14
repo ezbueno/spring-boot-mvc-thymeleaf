@@ -10,7 +10,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.buenoezandro.boot.domain.Departamento;
 import com.buenoezandro.boot.service.DepartamentoService;
-import com.buenoezandro.boot.utils.MensagemUtils;
 
 @Controller
 @RequestMapping(path = "/departamentos")
@@ -19,6 +18,10 @@ public class DepartamentoController {
 	private final DepartamentoService departamentoService;
 	
 	private static final String SUCCESS = "success";
+	private  static final String FAIL = "Departamento não removido. Possui cargo(s) vinculados(s).";
+	private static final String INSERT = "Departamento cadastrado com sucesso.";
+	private static final String EDIT = "Departamento editado com sucesso.";
+	public static final String DELETE = "Departamento excluído com sucesso.";
 	
 	public DepartamentoController(DepartamentoService departamentoService) {
 		this.departamentoService = departamentoService;
@@ -38,7 +41,7 @@ public class DepartamentoController {
 	@PostMapping(path = "/salvar")
 	public String salvar(Departamento departamento, RedirectAttributes attributes) {
 		this.departamentoService.salvar(departamento);
-		attributes.addFlashAttribute(SUCCESS, MensagemUtils.INSERT);
+		attributes.addFlashAttribute(SUCCESS, INSERT);
 		return "redirect:/departamentos/cadastrar";
 	}
 	
@@ -51,17 +54,17 @@ public class DepartamentoController {
 	@PostMapping(path = "/editar")
 	public String editar(Departamento departamento, RedirectAttributes attributes) {
 		this.departamentoService.editar(departamento);
-		attributes.addFlashAttribute(SUCCESS, MensagemUtils.EDIT);
+		attributes.addFlashAttribute(SUCCESS, EDIT);
 		return "redirect:/departamentos/cadastrar";
 	}
 	
 	@GetMapping(path = "/excluir/{id}")
 	public String excluir(@PathVariable(value = "id") Long id, ModelMap model) {
 		if (this.departamentoService.departamentoContemCargos(id)) {
-			model.addAttribute("fail", MensagemUtils.FAIL);
+			model.addAttribute("fail", FAIL);
 		} else {
 			this.departamentoService.excluir(id);
-			model.addAttribute(SUCCESS, MensagemUtils.DELETE);
+			model.addAttribute(SUCCESS, DELETE);
 		}
 		return this.listar(model);
 	}

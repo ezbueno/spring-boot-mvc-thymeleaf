@@ -1,5 +1,6 @@
 package com.buenoezandro.boot.web.controller;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
@@ -10,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.buenoezandro.boot.domain.Cargo;
-import com.buenoezandro.boot.domain.Departamento;
 import com.buenoezandro.boot.domain.Funcionario;
 import com.buenoezandro.boot.domain.UF;
 import com.buenoezandro.boot.service.CargoService;
@@ -45,10 +45,10 @@ public class FuncionarioController {
 	}
 	
 	@PostMapping(path = "/salvar")
-	public String salvar(Funcionario funcionario, RedirectAttributes attributes) {
+	public String salvar(Funcionario funcionario, RedirectAttributes attr) {
 		this.funcionarioService.salvar(funcionario);
-		attributes.addFlashAttribute(SUCCESS, INSERT);
-		return "redirect:/cargos/cadastrar";
+		attr.addFlashAttribute(SUCCESS, INSERT);
+		return "redirect:/funcionarios/cadastrar";
 	}
 	
 	@ModelAttribute(name = "cargos")

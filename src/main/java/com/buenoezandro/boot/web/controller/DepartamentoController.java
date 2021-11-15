@@ -16,10 +16,10 @@ import com.buenoezandro.boot.service.DepartamentoService;
 public class DepartamentoController {
 		
 	private static final String SUCCESS = "success";
-	private  static final String FAIL = "Departamento não removido. Possui cargo(s) vinculados(s).";
-	private static final String INSERT = "Departamento cadastrado com sucesso.";
-	private static final String EDIT = "Departamento editado com sucesso.";
-	public static final String DELETE = "Departamento excluído com sucesso.";
+	private static final String FAIL    = "Departamento não removido. Possui cargo(s) vinculados(s).";
+	private static final String INSERT  = "Departamento cadastrado com sucesso.";
+	private static final String EDIT    = "Departamento atualizado com sucesso.";
+	private static final String DELETE  = "Departamento excluído com sucesso.";
 	
 	private final DepartamentoService departamentoService;
 	

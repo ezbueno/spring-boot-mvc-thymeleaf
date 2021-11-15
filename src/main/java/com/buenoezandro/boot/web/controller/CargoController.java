@@ -20,7 +20,11 @@ import com.buenoezandro.boot.service.DepartamentoService;
 @RequestMapping(path = "/cargos")
 public class CargoController {
 
-	private static final String INSERT = "Cargo cadastrado com sucesso.";
+	private static final String SUCCESS = "success";
+	private static final String FAIL    = "Cargo não removido. Possui cargo(s) vinculados(s).";
+	private static final String INSERT  = "Cargo cadastrado com sucesso.";
+	private static final String EDIT    = "Cargo atualizado com sucesso.";
+	private static final String DELETE  = "Cargo excluído com sucesso.";
 	
 	private final CargoService cargoService;
 	private final DepartamentoService departamentoService;
@@ -44,7 +48,7 @@ public class CargoController {
 	@PostMapping(path = "/salvar")
 	public String salvar(Cargo cargo, RedirectAttributes attributes) {
 		this.cargoService.salvar(cargo);
-		attributes.addFlashAttribute("success", INSERT);
+		attributes.addFlashAttribute(SUCCESS, INSERT);
 		return "redirect:/cargos/cadastrar";
 	}
 	
@@ -55,10 +59,21 @@ public class CargoController {
 	}
 	
 	@PostMapping(path = "/editar")
-	public String editar(Cargo cargo, RedirectAttributes attr) {
+	public String editar(Cargo cargo, RedirectAttributes attributes) {
 		this.cargoService.editar(cargo);
-		attr.addFlashAttribute("success", "Registro atualizado com sucesso.");
+		attributes.addFlashAttribute(SUCCESS, EDIT);
 		return "redirect:/cargos/cadastrar";
+	}
+	
+	@GetMapping(path = "/excluir/{id}")
+	public String excluir(@PathVariable(value = "id") Long id, RedirectAttributes attributes) {
+		if (this.cargoService.cargoContemFuncionarios(id)) {
+			attributes.addFlashAttribute("fail", FAIL);
+		} else {
+			this.cargoService.excluir(id);
+			attributes.addFlashAttribute(SUCCESS, DELETE);
+		}
+		return "redirect:/cargos/listar";
 	}
 	
 	@ModelAttribute(name = "departamentos")

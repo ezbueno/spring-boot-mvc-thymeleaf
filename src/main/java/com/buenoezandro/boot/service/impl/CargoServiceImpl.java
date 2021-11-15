@@ -45,4 +45,10 @@ public class CargoServiceImpl implements CargoService {
 	public List<Cargo> buscarTodos() {
 		return this.cargoDao.findAll();
 	}
+
+	@Transactional(readOnly = true)
+	@Override
+	public boolean cargoContemFuncionarios(Long id) {
+		return !this.buscarPorId(id).getFuncionarios().isEmpty();		
+	}
 }

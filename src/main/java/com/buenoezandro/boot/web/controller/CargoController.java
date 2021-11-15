@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -19,11 +20,11 @@ import com.buenoezandro.boot.service.DepartamentoService;
 @RequestMapping(path = "/cargos")
 public class CargoController {
 
+	private static final String INSERT = "Cargo cadastrado com sucesso.";
+	
 	private final CargoService cargoService;
 	private final DepartamentoService departamentoService;
 	
-	private static final String INSERT = "Cargo cadastrado com sucesso.";
-
 	public CargoController(CargoService cargoService, DepartamentoService departamentoService) {
 		this.cargoService = cargoService;
 		this.departamentoService = departamentoService;
@@ -44,6 +45,19 @@ public class CargoController {
 	public String salvar(Cargo cargo, RedirectAttributes attributes) {
 		this.cargoService.salvar(cargo);
 		attributes.addFlashAttribute("success", INSERT);
+		return "redirect:/cargos/cadastrar";
+	}
+	
+	@GetMapping(path = "/editar/{id}")
+	public String preEditar(@PathVariable("id") Long id, ModelMap model) {
+		model.addAttribute("cargo", this.cargoService.buscarPorId(id));
+		return "cargo/cadastro";
+	}
+	
+	@PostMapping(path = "/editar")
+	public String editar(Cargo cargo, RedirectAttributes attr) {
+		this.cargoService.editar(cargo);
+		attr.addFlashAttribute("success", "Registro atualizado com sucesso.");
 		return "redirect:/cargos/cadastrar";
 	}
 	

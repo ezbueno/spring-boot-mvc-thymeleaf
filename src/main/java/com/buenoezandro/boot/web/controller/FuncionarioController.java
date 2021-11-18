@@ -3,9 +3,12 @@ package com.buenoezandro.boot.web.controller;
 import java.time.LocalDate;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,12 +27,13 @@ import com.buenoezandro.boot.service.FuncionarioService;
 @RequestMapping(path = "/funcionarios")
 public class FuncionarioController {
 
-	private static final String SUCCESS                  = "success";
-	private static final String INSERT                   = "Funcionário cadastrado com sucesso.";
-	private static final String EDIT                     = "Funcionário atualizado com sucesso.";
-	private static final String DELETE                   = "Funcionário excluído com sucesso.";
-	private static final String NOME_ATRIBUTO            = "funcionarios";
-	private static final String PAGINA_FUNCIONARIO_LISTA = "/funcionario/lista";
+	private static final String SUCCESS                     = "success";
+	private static final String INSERT                      = "Funcionário cadastrado com sucesso.";
+	private static final String EDIT                        = "Funcionário atualizado com sucesso.";
+	private static final String DELETE                      = "Funcionário excluído com sucesso.";
+	private static final String NOME_ATRIBUTO               = "funcionarios";
+	private static final String PAGINA_FUNCIONARIO_LISTA    = "/funcionario/lista";
+	private static final String PAGINA_FUNCIONARIO_CADASTRO = "/funcionario/cadastro";
 
 	private final FuncionarioService funcionarioService;
 	private final CargoService cargoService;
@@ -41,7 +45,7 @@ public class FuncionarioController {
 
 	@GetMapping(path = "/cadastrar")
 	public String cadastrar(Funcionario funcionario) {
-		return "/funcionario/cadastro";
+		return PAGINA_FUNCIONARIO_CADASTRO;
 	}
 
 	@GetMapping(path = "/listar")
@@ -51,7 +55,11 @@ public class FuncionarioController {
 	}
 
 	@PostMapping(path = "/salvar")
-	public String salvar(Funcionario funcionario, RedirectAttributes attr) {
+	public String salvar(@Valid Funcionario funcionario, BindingResult result, RedirectAttributes attr) {
+		if (result.hasErrors()) {
+			return PAGINA_FUNCIONARIO_CADASTRO;
+		}
+		
 		this.funcionarioService.salvar(funcionario);
 		attr.addFlashAttribute(SUCCESS, INSERT);
 		return "redirect:/funcionarios/cadastrar";
@@ -60,11 +68,15 @@ public class FuncionarioController {
 	@GetMapping(path = "/editar/{id}")
 	public String preEditar(@PathVariable(value = "id") Long id, ModelMap model) {
 		model.addAttribute("funcionario", this.funcionarioService.buscarPorId(id));
-		return "/funcionario/cadastro";
+		return PAGINA_FUNCIONARIO_CADASTRO;
 	}
 
 	@PostMapping(path = "/editar")
-	public String editar(Funcionario funcionario, RedirectAttributes attr) {
+	public String editar(@Valid Funcionario funcionario, BindingResult result, RedirectAttributes attr) {
+		if (result.hasErrors()) {
+			return PAGINA_FUNCIONARIO_CADASTRO;
+		}
+		
 		this.funcionarioService.editar(funcionario);
 		attr.addFlashAttribute(SUCCESS, EDIT);
 		return "redirect:/funcionarios/cadastrar";

@@ -1,6 +1,5 @@
 package com.buenoezandro.boot.web.controller;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
@@ -31,7 +30,7 @@ public class FuncionarioController {
 	
 	public FuncionarioController(FuncionarioService funcionarioService, CargoService cargoService) {
 		this.funcionarioService = funcionarioService;
-		this.cargoService = cargoService;;
+		this.cargoService = cargoService;
 	}
 
 	@GetMapping(path = "/cadastrar")

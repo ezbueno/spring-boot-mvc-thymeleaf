@@ -7,5 +7,6 @@
 * Spring Boot
 * Spring MVC
 * Spring Data JPA
+* Bean Validation
 * Thymeleaf
 * MySQL

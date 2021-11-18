@@ -24,11 +24,12 @@ import com.buenoezandro.boot.service.FuncionarioService;
 @RequestMapping(path = "/funcionarios")
 public class FuncionarioController {
 
-	private static final String SUCCESS       = "success";
-	private static final String INSERT        = "Funcionário cadastrado com sucesso.";
-	private static final String EDIT          = "Funcionário atualizado com sucesso.";
-	private static final String DELETE        = "Funcionário excluído com sucesso.";
-	private static final String NOME_ATRIBUTO = "funcionarios";
+	private static final String SUCCESS                  = "success";
+	private static final String INSERT                   = "Funcionário cadastrado com sucesso.";
+	private static final String EDIT                     = "Funcionário atualizado com sucesso.";
+	private static final String DELETE                   = "Funcionário excluído com sucesso.";
+	private static final String NOME_ATRIBUTO            = "funcionarios";
+	private static final String PAGINA_FUNCIONARIO_LISTA = "/funcionario/lista";
 
 	private final FuncionarioService funcionarioService;
 	private final CargoService cargoService;
@@ -46,7 +47,7 @@ public class FuncionarioController {
 	@GetMapping(path = "/listar")
 	public String listar(ModelMap model) {
 		model.addAttribute(NOME_ATRIBUTO, this.funcionarioService.buscarTodos());
-		return "/funcionario/lista";
+		return PAGINA_FUNCIONARIO_LISTA;
 	}
 
 	@PostMapping(path = "/salvar")
@@ -59,7 +60,7 @@ public class FuncionarioController {
 	@GetMapping(path = "/editar/{id}")
 	public String preEditar(@PathVariable(value = "id") Long id, ModelMap model) {
 		model.addAttribute("funcionario", this.funcionarioService.buscarPorId(id));
-		return "funcionario/cadastro";
+		return "/funcionario/cadastro";
 	}
 
 	@PostMapping(path = "/editar")
@@ -79,13 +80,13 @@ public class FuncionarioController {
 	@GetMapping(path = "/buscar/nome")
 	public String getPorNome(@RequestParam(value = "nome") String nome, ModelMap model) {
 		model.addAttribute(NOME_ATRIBUTO, this.funcionarioService.buscarPorNome(nome));
-		return "funcionario/lista";
+		return PAGINA_FUNCIONARIO_LISTA;
 	}
 
 	@GetMapping(path = "/buscar/cargo")
 	public String getPorCargo(@RequestParam(value = "id") Long id, ModelMap model) {
 		model.addAttribute(NOME_ATRIBUTO, this.funcionarioService.buscarPorCargo(id));
-		return "funcionario/lista";
+		return PAGINA_FUNCIONARIO_LISTA;
 	}
 
 	@GetMapping(path = "/buscar/data")
@@ -94,7 +95,7 @@ public class FuncionarioController {
 			@RequestParam(value = "saida", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate saida,
 			ModelMap model) {
 		model.addAttribute(NOME_ATRIBUTO, this.funcionarioService.buscarPorDatas(entrada, saida));
-		return "funcionario/lista";
+		return PAGINA_FUNCIONARIO_LISTA;
 	}
 
 	@ModelAttribute(name = "cargos")

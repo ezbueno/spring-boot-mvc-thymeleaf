@@ -1,5 +1,7 @@
 package com.buenoezandro.boot.service.impl;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -55,5 +57,18 @@ public class FuncionarioServiceImpl implements FuncionarioService {
 	@Override
 	public List<Funcionario> buscarPorCargo(Long id) {
 		return this.funcionarioDao.findByCargoId(id);
+	}
+
+	@Override
+	public List<Funcionario> buscarPorDatas(LocalDate entrada, LocalDate saida) {
+		if (entrada != null && saida != null) {
+			return this.funcionarioDao.findByDataEntradaDataSaida(entrada, saida);
+		} else if (entrada != null) {
+			return this.funcionarioDao.findByDataEntrada(entrada);
+		} else if (saida != null) {
+			return this.funcionarioDao.findByDataSaida(saida);
+		} else {
+			return new ArrayList<>();
+		}
 	}
 }

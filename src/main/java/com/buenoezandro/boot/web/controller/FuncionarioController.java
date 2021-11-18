@@ -1,7 +1,9 @@
 package com.buenoezandro.boot.web.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,15 +23,16 @@ import com.buenoezandro.boot.service.FuncionarioService;
 @Controller
 @RequestMapping(path = "/funcionarios")
 public class FuncionarioController {
-	
-	private static final String SUCCESS = "success";
-	private static final String INSERT  = "Funcionário cadastrado com sucesso.";
-	private static final String EDIT    = "Funcionário atualizado com sucesso.";
-	private static final String DELETE  = "Funcionário excluído com sucesso.";
-	
+
+	private static final String SUCCESS       = "success";
+	private static final String INSERT        = "Funcionário cadastrado com sucesso.";
+	private static final String EDIT          = "Funcionário atualizado com sucesso.";
+	private static final String DELETE        = "Funcionário excluído com sucesso.";
+	private static final String NOME_ATRIBUTO = "funcionarios";
+
 	private final FuncionarioService funcionarioService;
 	private final CargoService cargoService;
-	
+
 	public FuncionarioController(FuncionarioService funcionarioService, CargoService cargoService) {
 		this.funcionarioService = funcionarioService;
 		this.cargoService = cargoService;
@@ -39,57 +42,66 @@ public class FuncionarioController {
 	public String cadastrar(Funcionario funcionario) {
 		return "/funcionario/cadastro";
 	}
-	
+
 	@GetMapping(path = "/listar")
 	public String listar(ModelMap model) {
-		model.addAttribute("funcionarios", this.funcionarioService.buscarTodos());
+		model.addAttribute(NOME_ATRIBUTO, this.funcionarioService.buscarTodos());
 		return "/funcionario/lista";
 	}
-	
+
 	@PostMapping(path = "/salvar")
 	public String salvar(Funcionario funcionario, RedirectAttributes attr) {
 		this.funcionarioService.salvar(funcionario);
 		attr.addFlashAttribute(SUCCESS, INSERT);
 		return "redirect:/funcionarios/cadastrar";
 	}
-	
+
 	@GetMapping(path = "/editar/{id}")
 	public String preEditar(@PathVariable(value = "id") Long id, ModelMap model) {
 		model.addAttribute("funcionario", this.funcionarioService.buscarPorId(id));
 		return "funcionario/cadastro";
 	}
-	
+
 	@PostMapping(path = "/editar")
 	public String editar(Funcionario funcionario, RedirectAttributes attr) {
 		this.funcionarioService.editar(funcionario);
 		attr.addFlashAttribute(SUCCESS, EDIT);
 		return "redirect:/funcionarios/cadastrar";
 	}
-	
+
 	@GetMapping(path = "/excluir/{id}")
 	public String excluir(@PathVariable(value = "id") Long id, RedirectAttributes attr) {
 		this.funcionarioService.excluir(id);
 		attr.addFlashAttribute(SUCCESS, DELETE);
 		return "redirect:/funcionarios/listar";
 	}
-	
+
 	@GetMapping(path = "/buscar/nome")
 	public String getPorNome(@RequestParam(value = "nome") String nome, ModelMap model) {
-		model.addAttribute("funcionarios", this.funcionarioService.buscarPorNome(nome));
+		model.addAttribute(NOME_ATRIBUTO, this.funcionarioService.buscarPorNome(nome));
 		return "funcionario/lista";
 	}
-	
+
 	@GetMapping(path = "/buscar/cargo")
 	public String getPorCargo(@RequestParam(value = "id") Long id, ModelMap model) {
-		model.addAttribute("funcionarios", this.funcionarioService.buscarPorCargo(id));
+		model.addAttribute(NOME_ATRIBUTO, this.funcionarioService.buscarPorCargo(id));
 		return "funcionario/lista";
 	}
-	
+
+	@GetMapping(path = "/buscar/data")
+	public String getPorDatas(
+			@RequestParam(value = "entrada", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate entrada,
+			@RequestParam(value = "saida", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate saida,
+			ModelMap model) {
+		model.addAttribute(NOME_ATRIBUTO, this.funcionarioService.buscarPorDatas(entrada, saida));
+		return "funcionario/lista";
+	}
+
 	@ModelAttribute(name = "cargos")
 	public List<Cargo> listarCargos() {
 		return this.cargoService.buscarTodos();
 	}
-	
+
 	@ModelAttribute(name = "ufs")
 	public UF[] getUFs() {
 		return UF.values();

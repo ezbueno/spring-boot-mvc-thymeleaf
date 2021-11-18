@@ -1,7 +1,10 @@
 package com.buenoezandro.boot.web.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,11 +18,12 @@ import com.buenoezandro.boot.service.DepartamentoService;
 @RequestMapping(path = "/departamentos")
 public class DepartamentoController {
 		
-	private static final String SUCCESS = "success";
-	private static final String FAIL    = "Departamento não removido. Possui cargo(s) vinculados(s).";
-	private static final String INSERT  = "Departamento cadastrado com sucesso.";
-	private static final String EDIT    = "Departamento atualizado com sucesso.";
-	private static final String DELETE  = "Departamento excluído com sucesso.";
+	private static final String SUCCESS                      = "success";
+	private static final String FAIL                         = "Departamento não removido. Possui cargo(s) vinculados(s).";
+	private static final String INSERT                       = "Departamento cadastrado com sucesso.";
+	private static final String EDIT                         = "Departamento atualizado com sucesso.";
+	private static final String DELETE                       = "Departamento excluído com sucesso.";
+	private static final String PAGINA_DEPARTAMENTO_CADASTRO = "/departamento/cadastro";
 	
 	private final DepartamentoService departamentoService;
 	
@@ -29,7 +33,7 @@ public class DepartamentoController {
 
 	@GetMapping(path = "/cadastrar")
 	public String cadastrar(Departamento departamento) {
-		return "/departamento/cadastro";
+		return PAGINA_DEPARTAMENTO_CADASTRO;
 	}
 	
 	@GetMapping(path = "/listar")
@@ -39,7 +43,11 @@ public class DepartamentoController {
 	}
 	
 	@PostMapping(path = "/salvar")
-	public String salvar(Departamento departamento, RedirectAttributes attributes) {
+	public String salvar(@Valid Departamento departamento, BindingResult result, RedirectAttributes attributes) {
+		if (result.hasErrors()) {
+			return PAGINA_DEPARTAMENTO_CADASTRO;
+		}
+		
 		this.departamentoService.salvar(departamento);
 		attributes.addFlashAttribute(SUCCESS, INSERT);
 		return "redirect:/departamentos/cadastrar";
@@ -48,11 +56,15 @@ public class DepartamentoController {
 	@GetMapping(path = "/editar/{id}")
 	public String preEditar(@PathVariable(value = "id") Long id, ModelMap model) {
 		model.addAttribute("departamento", this.departamentoService.buscarPorId(id));
-		return "/departamento/cadastro";
+		return PAGINA_DEPARTAMENTO_CADASTRO;
 	}
 	
 	@PostMapping(path = "/editar")
-	public String editar(Departamento departamento, RedirectAttributes attributes) {
+	public String editar(@Valid Departamento departamento, BindingResult result, RedirectAttributes attributes) {
+		if (result.hasErrors()) {
+			return PAGINA_DEPARTAMENTO_CADASTRO;
+		}
+		
 		this.departamentoService.editar(departamento);
 		attributes.addFlashAttribute(SUCCESS, EDIT);
 		return "redirect:/departamentos/cadastrar";

@@ -2,8 +2,11 @@ package com.buenoezandro.boot.web.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,11 +23,12 @@ import com.buenoezandro.boot.service.DepartamentoService;
 @RequestMapping(path = "/cargos")
 public class CargoController {
 
-	private static final String SUCCESS = "success";
-	private static final String FAIL    = "Cargo não removido. Possui cargo(s) vinculados(s).";
-	private static final String INSERT  = "Cargo cadastrado com sucesso.";
-	private static final String EDIT    = "Cargo atualizado com sucesso.";
-	private static final String DELETE  = "Cargo excluído com sucesso.";
+	private static final String SUCCESS               = "success";
+	private static final String FAIL                  = "Cargo não removido. Possui cargo(s) vinculados(s).";
+	private static final String INSERT                = "Cargo cadastrado com sucesso.";
+	private static final String EDIT                  = "Cargo atualizado com sucesso.";
+	private static final String DELETE                = "Cargo excluído com sucesso.";
+	private static final String PAGINA_CARGO_CADASTRO = "/cargo/cadastro";
 	
 	private final CargoService cargoService;
 	private final DepartamentoService departamentoService;
@@ -36,7 +40,7 @@ public class CargoController {
 
 	@GetMapping(path = "/cadastrar")
 	public String cadastrar(Cargo cargo) {
-		return "/cargo/cadastro";
+		return PAGINA_CARGO_CADASTRO;
 	}
 
 	@GetMapping(path = "/listar")
@@ -46,7 +50,11 @@ public class CargoController {
 	}
 
 	@PostMapping(path = "/salvar")
-	public String salvar(Cargo cargo, RedirectAttributes attributes) {
+	public String salvar(@Valid Cargo cargo, BindingResult result, RedirectAttributes attributes) {
+		if (result.hasErrors()) {
+			return PAGINA_CARGO_CADASTRO;
+		}
+		
 		this.cargoService.salvar(cargo);
 		attributes.addFlashAttribute(SUCCESS, INSERT);
 		return "redirect:/cargos/cadastrar";
@@ -55,11 +63,15 @@ public class CargoController {
 	@GetMapping(path = "/editar/{id}")
 	public String preEditar(@PathVariable(value = "id") Long id, ModelMap model) {
 		model.addAttribute("cargo", this.cargoService.buscarPorId(id));
-		return "/cargo/cadastro";
+		return PAGINA_CARGO_CADASTRO;
 	}
 	
 	@PostMapping(path = "/editar")
-	public String editar(Cargo cargo, RedirectAttributes attributes) {
+	public String editar(@Valid Cargo cargo, BindingResult result, RedirectAttributes attributes) {
+		if (result.hasErrors()) {
+			return PAGINA_CARGO_CADASTRO;
+		}
+		
 		this.cargoService.editar(cargo);
 		attributes.addFlashAttribute(SUCCESS, EDIT);
 		return "redirect:/cargos/cadastrar";

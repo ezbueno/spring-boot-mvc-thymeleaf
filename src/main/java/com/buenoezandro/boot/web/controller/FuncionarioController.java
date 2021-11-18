@@ -3,8 +3,10 @@ package com.buenoezandro.boot.web.controller;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -20,7 +22,6 @@ import com.buenoezandro.boot.service.FuncionarioService;
 public class FuncionarioController {
 	
 	private static final String SUCCESS = "success";
-	private static final String FAIL    = "Funcionário não removido. Possui cargo(s) vinculados(s).";
 	private static final String INSERT  = "Funcionário cadastrado com sucesso.";
 	private static final String EDIT    = "Funcionário atualizado com sucesso.";
 	private static final String DELETE  = "Funcionário excluído com sucesso.";
@@ -39,7 +40,8 @@ public class FuncionarioController {
 	}
 	
 	@GetMapping(path = "/listar")
-	public String listar() {
+	public String listar(ModelMap model) {
+		model.addAttribute("funcionarios", this.funcionarioService.buscarTodos());
 		return "/funcionario/lista";
 	}
 	
@@ -48,6 +50,26 @@ public class FuncionarioController {
 		this.funcionarioService.salvar(funcionario);
 		attr.addFlashAttribute(SUCCESS, INSERT);
 		return "redirect:/funcionarios/cadastrar";
+	}
+	
+	@GetMapping(path = "/editar/{id}")
+	public String preEditar(@PathVariable(value = "id") Long id, ModelMap model) {
+		model.addAttribute("funcionario", this.funcionarioService.buscarPorId(id));
+		return "funcionario/cadastro";
+	}
+	
+	@PostMapping(path = "/editar")
+	public String editar(Funcionario funcionario, RedirectAttributes attr) {
+		this.funcionarioService.editar(funcionario);
+		attr.addFlashAttribute(SUCCESS, EDIT);
+		return "redirect:/funcionarios/cadastrar";
+	}
+	
+	@GetMapping(path = "/excluir/{id}")
+	public String excluir(@PathVariable(value = "id") Long id, RedirectAttributes attr) {
+		this.funcionarioService.excluir(id);
+		attr.addFlashAttribute(SUCCESS, DELETE);
+		return "redirect:/funcionarios/listar";
 	}
 	
 	@ModelAttribute(name = "cargos")

@@ -9,7 +9,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,6 +24,7 @@ import com.buenoezandro.boot.domain.Funcionario;
 import com.buenoezandro.boot.domain.UF;
 import com.buenoezandro.boot.service.CargoService;
 import com.buenoezandro.boot.service.FuncionarioService;
+import com.buenoezandro.boot.web.validator.FuncionarioValidator;
 
 @Controller
 @RequestMapping(path = "/funcionarios")
@@ -41,6 +44,11 @@ public class FuncionarioController {
 	public FuncionarioController(FuncionarioService funcionarioService, CargoService cargoService) {
 		this.funcionarioService = funcionarioService;
 		this.cargoService = cargoService;
+	}
+	
+	@InitBinder
+	public void initBinder(WebDataBinder binder) {
+		binder.addValidators(new FuncionarioValidator());
 	}
 
 	@GetMapping(path = "/cadastrar")

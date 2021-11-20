@@ -2,6 +2,7 @@
 <html layout:decorate="~{layout}">
 <head>
 	<meta charset="UTF-8" />
+	<link th:href="@{/css/style.css}" rel="stylesheet" />
 </head>
 <body>			
 	<section class="layout-content" layout:fragment="corpo">
@@ -15,6 +16,9 @@
 				</ul>
 			</div>
 		</nav>
+		<div class="img">
+			<img th:src="@{/image/employee.png}" alt="logo-employee" />
+		</div>
 	</section>		
 	
 	<footer class="layout-footer">

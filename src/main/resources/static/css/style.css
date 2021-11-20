@@ -108,7 +108,7 @@ body {
 	bottom: 0;
 	margin: 0;
 	height: 50px;
-	border-top: 1px solid#eeeeee;
+	border-top: 1px solid #eeeeee;
 }
 
 .footer-copy {
@@ -116,4 +116,11 @@ body {
 	display: block;
 	color: #777777;
 	text-align: center;
+}
+
+.img {
+	text-align: center;
+	width: 80%;
+	height: 50%;
+	margin: 8.5rem auto 0 auto;
 }

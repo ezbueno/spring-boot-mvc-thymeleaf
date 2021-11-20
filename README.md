@@ -1,6 +1,6 @@
 # Spring Boot e MVC
 
-* Cadastro de Funcionários e seus respectivos cargos por departamento
+* Cadastro e Listagem de Departamentos, Cargos e Funcionários.
 
 # Tecnologias
 * Java 17

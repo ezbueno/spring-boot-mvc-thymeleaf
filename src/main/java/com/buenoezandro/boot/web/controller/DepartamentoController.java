@@ -23,7 +23,7 @@ public class DepartamentoController {
 	private static final String INSERT                       = "Departamento cadastrado com sucesso.";
 	private static final String EDIT                         = "Departamento atualizado com sucesso.";
 	private static final String DELETE                       = "Departamento excluído com sucesso.";
-	private static final String PAGINA_DEPARTAMENTO_CADASTRO = "/departamento/cadastro";
+	private static final String PAGINA_DEPARTAMENTO_CADASTRO = "departamento/cadastro";
 	
 	private final DepartamentoService departamentoService;
 	
@@ -39,7 +39,7 @@ public class DepartamentoController {
 	@GetMapping(path = "/listar")
 	public String listar(ModelMap model) {
 		model.addAttribute("departamentos", this.departamentoService.buscarTodos());
-		return "/departamento/lista";
+		return "departamento/lista";
 	}
 	
 	@PostMapping(path = "/salvar")

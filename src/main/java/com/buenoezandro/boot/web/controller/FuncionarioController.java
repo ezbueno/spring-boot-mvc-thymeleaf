@@ -35,8 +35,8 @@ public class FuncionarioController {
 	private static final String EDIT                        = "Funcionário atualizado com sucesso.";
 	private static final String DELETE                      = "Funcionário excluído com sucesso.";
 	private static final String NOME_ATRIBUTO               = "funcionarios";
-	private static final String PAGINA_FUNCIONARIO_LISTA    = "/funcionario/lista";
-	private static final String PAGINA_FUNCIONARIO_CADASTRO = "/funcionario/cadastro";
+	private static final String PAGINA_FUNCIONARIO_LISTA    = "funcionario/lista";
+	private static final String PAGINA_FUNCIONARIO_CADASTRO = "funcionario/cadastro";
 
 	private final FuncionarioService funcionarioService;
 	private final CargoService cargoService;

@@ -28,7 +28,7 @@ public class CargoController {
 	private static final String INSERT                = "Cargo cadastrado com sucesso.";
 	private static final String EDIT                  = "Cargo atualizado com sucesso.";
 	private static final String DELETE                = "Cargo excluído com sucesso.";
-	private static final String PAGINA_CARGO_CADASTRO = "/cargo/cadastro";
+	private static final String PAGINA_CARGO_CADASTRO = "cargo/cadastro";
 	
 	private final CargoService cargoService;
 	private final DepartamentoService departamentoService;
@@ -46,7 +46,7 @@ public class CargoController {
 	@GetMapping(path = "/listar")
 	public String listar(ModelMap model) {
 		model.addAttribute("cargos", this.cargoService.buscarTodos());
-		return "/cargo/lista";
+		return "cargo/lista";
 	}
 
 	@PostMapping(path = "/salvar")

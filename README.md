@@ -10,4 +10,6 @@
 * Spring Validator
 * Bean Validation
 * Thymeleaf
+* Bootstrap 4
+* WebJars
 * MySQL

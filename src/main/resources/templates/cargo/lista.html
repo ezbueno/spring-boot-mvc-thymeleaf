@@ -33,8 +33,8 @@
 	                    </tr>
                     </thead>
                     <tbody>
-						<tr th:each="c : ${cargos}">
-							<td th:text="${c.id}">1</td>
+						<tr th:each="c : ${pageCargo.registros}">
+							<td th:text="${c.id}"></td>
 							<td th:text="${c.nome}"></td>
 							<td th:text="${c.departamento.nome}"></td>
 	                        <td colspan="2">
@@ -52,7 +52,7 @@
                 <nav aria-label="Page navigation example">
 				  <ul class="pagination justify-content-center">
 				    <li class="page-item disabled">
-				      <a class="page-link" href="#" tabindex="-1">Previous</a>
+				      <a class="page-link" th:href="@{/cargos/listar(page=${pageCargo.pagina - 1})}" tabindex="-1">Anterior</a>
 				    </li>
 				    <li class="page-item">
 				    	<a class="page-link" href="#">1</a>
@@ -64,7 +64,7 @@
 				    	<a class="page-link" href="#">3</a>
 				    </li>
 				    <li class="page-item">
-				      <a class="page-link" href="#">Next</a>
+				      <a class="page-link" th:href="@{/cargos/listar(page=${pageCargo.pagina + 1})}">Próximo</a>
 				    </li>
 				  </ul>
 				</nav>

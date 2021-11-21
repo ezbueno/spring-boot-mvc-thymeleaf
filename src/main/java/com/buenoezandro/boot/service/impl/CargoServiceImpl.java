@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.buenoezandro.boot.dao.CargoDao;
 import com.buenoezandro.boot.domain.Cargo;
 import com.buenoezandro.boot.service.CargoService;
+import com.buenoezandro.boot.util.PaginacaoUtil;
 
 @Transactional(readOnly = false)
 @Service
@@ -50,5 +51,10 @@ public class CargoServiceImpl implements CargoService {
 	@Override
 	public boolean cargoContemFuncionarios(Long id) {
 		return !this.buscarPorId(id).getFuncionarios().isEmpty();		
+	}
+
+	@Override
+	public PaginacaoUtil<Cargo> buscarPorPagina(int pagina) {
+		return this.cargoDao.buscaPaginada(pagina);
 	}
 }

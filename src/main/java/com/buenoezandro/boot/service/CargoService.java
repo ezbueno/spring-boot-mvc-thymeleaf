@@ -3,6 +3,7 @@ package com.buenoezandro.boot.service;
 import java.util.List;
 
 import com.buenoezandro.boot.domain.Cargo;
+import com.buenoezandro.boot.util.PaginacaoUtil;
 
 public interface CargoService {
 
@@ -17,4 +18,6 @@ public interface CargoService {
 	List<Cargo> buscarTodos();
 	
 	boolean cargoContemFuncionarios(Long id);
+	
+	PaginacaoUtil<Cargo> buscarPorPagina(int pagina);
 }

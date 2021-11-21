@@ -13,13 +13,19 @@ public class CargoDaoImpl extends AbstractDao<Cargo, Long> implements CargoDao {
 	public PaginacaoUtil<Cargo> buscaPaginada(int pagina) {
 		int tamanho = 5;
 		int inicio = (pagina - 1) * tamanho;
-		
+
 		List<Cargo> cargos = this.getEntityManager()
 				.createQuery("SELECT c FROM Cargo c ORDER BY c.nome ASC", Cargo.class)
 				.setFirstResult(inicio)
-				.setMaxResults(tamanho)
-				.getResultList();
+				.setMaxResults(tamanho).getResultList();
 		
-		return new PaginacaoUtil<>(tamanho, pagina, 0, cargos);
+		long totalRegistros = this.count();
+		long totalPaginas = (totalRegistros + (tamanho - 1)) / tamanho;
+
+		return new PaginacaoUtil<>(tamanho, pagina, totalPaginas, cargos);
+	}
+
+	public long count() {
+		return this.getEntityManager().createQuery("SELECT COUNT(*) FROM Cargo", Long.class).getSingleResult();
 	}
 }

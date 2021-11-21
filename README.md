@@ -12,4 +12,7 @@
 * Thymeleaf
 * Bootstrap 4
 * WebJars
-* MySQL
+* PostgreSQL
+
+# Link da aplicação no Heroku
+* https://ezb-spring-boot-mvc.herokuapp.com/

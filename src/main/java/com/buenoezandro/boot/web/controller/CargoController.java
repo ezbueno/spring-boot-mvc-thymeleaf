@@ -32,10 +32,10 @@ public class CargoController {
 	private static final String EDIT                  = "Cargo atualizado com sucesso.";
 	private static final String DELETE                = "Cargo excluído com sucesso.";
 	private static final String PAGINA_CARGO_CADASTRO = "cargo/cadastro";
-	
+
 	private final CargoService cargoService;
 	private final DepartamentoService departamentoService;
-	
+
 	public CargoController(CargoService cargoService, DepartamentoService departamentoService) {
 		this.cargoService = cargoService;
 		this.departamentoService = departamentoService;
@@ -47,10 +47,13 @@ public class CargoController {
 	}
 
 	@GetMapping(path = "/listar")
-	public String listar(ModelMap model, @RequestParam(value = "page") Optional<Integer> page) {
+	public String listar(ModelMap model, @RequestParam(value = "page") Optional<Integer> page,
+			@RequestParam(value = "dir") Optional<String> dir) {
 		int paginaAtual = page.orElse(1);
-		PaginacaoUtil<Cargo> pageCargo = this.cargoService.buscarPorPagina(paginaAtual);
+		String ordem = dir.orElse("ASC");
 		
+		PaginacaoUtil<Cargo> pageCargo = this.cargoService.buscarPorPagina(paginaAtual, ordem);
+
 		model.addAttribute("pageCargo", pageCargo);
 		return "cargo/lista";
 	}
@@ -60,29 +63,29 @@ public class CargoController {
 		if (result.hasErrors()) {
 			return PAGINA_CARGO_CADASTRO;
 		}
-		
+
 		this.cargoService.salvar(cargo);
 		attributes.addFlashAttribute(SUCCESS, INSERT);
 		return "redirect:/cargos/cadastrar";
 	}
-	
+
 	@GetMapping(path = "/editar/{id}")
 	public String preEditar(@PathVariable(value = "id") Long id, ModelMap model) {
 		model.addAttribute("cargo", this.cargoService.buscarPorId(id));
 		return PAGINA_CARGO_CADASTRO;
 	}
-	
+
 	@PostMapping(path = "/editar")
 	public String editar(@Valid Cargo cargo, BindingResult result, RedirectAttributes attributes) {
 		if (result.hasErrors()) {
 			return PAGINA_CARGO_CADASTRO;
 		}
-		
+
 		this.cargoService.editar(cargo);
 		attributes.addFlashAttribute(SUCCESS, EDIT);
 		return "redirect:/cargos/cadastrar";
 	}
-	
+
 	@GetMapping(path = "/excluir/{id}")
 	public String excluir(@PathVariable(value = "id") Long id, RedirectAttributes attributes) {
 		if (this.cargoService.cargoContemFuncionarios(id)) {
@@ -93,7 +96,7 @@ public class CargoController {
 		}
 		return "redirect:/cargos/listar";
 	}
-	
+
 	@ModelAttribute(name = "departamentos")
 	public List<Departamento> listarDepartamentos() {
 		return this.departamentoService.buscarTodos();

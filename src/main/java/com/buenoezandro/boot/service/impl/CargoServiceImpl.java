@@ -54,7 +54,7 @@ public class CargoServiceImpl implements CargoService {
 	}
 
 	@Override
-	public PaginacaoUtil<Cargo> buscarPorPagina(int pagina) {
-		return this.cargoDao.buscaPaginada(pagina);
+	public PaginacaoUtil<Cargo> buscarPorPagina(int pagina, String direcao) {
+		return this.cargoDao.buscaPaginada(pagina, direcao);
 	}
 }

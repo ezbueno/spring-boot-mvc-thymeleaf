@@ -1,6 +1,9 @@
 # Spring Boot e MVC
 
-* Cadastro e Listagem de Departamentos, Cargos e Funcionários.
+* Cadastro de Departamentos, Cargos e Funcionários.
+* Listagem de Departamentos, Cargos e Funcionários.
+* Paginação da lista de cargos.
+* Ordenação da lista de cargos pode ser realizada ao clicar sobre as setas da coluna Cargo, de forma ascendente (seta para cima) e descendente (seta para baixo). 
 
 # Tecnologias
 * Java 17
